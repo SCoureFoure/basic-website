@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Testing Playground</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 20px;
+		}
+		.container {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+		}
+		section {
+			border: 1px solid #ddd;
+			padding: 20px;
+			border-radius: 5px;
+		}
+		h2 {
+			margin-top: 0;
+			color: #333;
+		}
+		.form-group {
+			margin-bottom: 15px;
+		}
+		label {
+			display: block;
+			margin-bottom: 5px;
+		}
+		button {
+			padding: 8px 16px;
+			margin-right: 10px;
+			cursor: pointer;
+		}
+		input, select, textarea {
+			padding: 8px;
+			width: 300px;
+		}
+		.result-area {
+			margin-top: 20px;
+			padding: 10px;
+			border: 1px solid #ddd;
+			min-height: 100px;
+		}
+		.hidden {
+			display: none;
+		}
+		.tabs {
+			display: flex;
+			border-bottom: 1px solid #ddd;
+		}
+		.tab {
+			padding: 10px 20px;
+			cursor: pointer;
+			border: 1px solid transparent;
+		}
+		.tab.active {
+			border: 1px solid #ddd;
+			border-bottom-color: white;
+			border-radius: 5px 5px 0 0;
+			margin-bottom: -1px;
+		}
+		.tab-content {
+			padding: 20px;
+			border: 1px solid #ddd;
+			border-top: none;
+		}
+		.tab-pane {
+			display: none;
+		}
+		.tab-pane.active {
+			display: block;
+		}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+		table, th, td {
+			border: 1px solid #ddd;
+		}
+		th, td {
+			padding: 8px;
+			text-align: left;
+		}
+		.modal {
+			display: none;
+			position: fixed;
+			z-index: 1;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0,0,0,0.4);
+		}
+		.modal-content {
+			background-color: #fefefe;
+			margin: 15% auto;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 80%;
+			max-width: 500px;
+		}
+		.close {
+			color: #aaa;
+			float: right;
+			font-size: 28px;
+			font-weight: bold;
+			cursor: pointer;
+		}
+		.loading {
+			border: 4px solid #f3f3f3;
+			border-top: 4px solid #3498db;
+			border-radius: 50%;
+			width: 20px;
+			height: 20px;
+			animation: spin 2s linear infinite;
+			display: inline-block;
+			margin-left: 10px;
+		}
+		@keyframes spin {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
+		}
+	</style>
+</head>
+<body>
+<h1>Testing Elements Playground</h1>
+
+<div class="container">
+	<!-- Form Section -->
+	<section id="form-section">
+		<h2>Form Elements</h2>
+
+		<form id="testForm">
+			<div class="form-group">
+				<label for="userName">Name:</label>
+				<input type="text" id="userName" name="userName" placeholder="Enter your name">
+			</div>
+
+			<div class="form-group">
+				<label for="userEmail">Email:</label>
+				<input type="email" id="userEmail" name="userEmail" placeholder="Enter your email">
+			</div>
+
+			<div class="form-group">
+				<label for="userPassword">Password:</label>
+				<input type="password" id="userPassword" name="userPassword" placeholder="Enter password">
+			</div>
+
+			<div class="form-group">
+				<label for="userAge">Age:</label>
+				<input type="number" id="userAge" name="userAge" min="18" max="120">
+			</div>
+
+			<div class="form-group">
+				<label for="userCountry">Country:</label>
+				<select id="userCountry" name="userCountry">
+					<option value="">-- Select a country --</option>
+					<option value="us">United States</option>
+					<option value="ca">Canada</option>
+					<option value="uk">United Kingdom</option>
+					<option value="au">Australia</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label>Gender:</label>
+				<div class="radio-group">
+					<div class="radio-item">
+						<input type="radio" id="male" name="gender" value="male">
+						<label for="male">Male</label>
+					</div>
+					<div class="radio-item">
+						<input type="radio" id="female" name="gender" value="female">
+						<label for="female">Female</label>
+					</div>
+					<div class="radio-item">
+						<input type="radio" id="other" name="gender" value="other">
+						<label for="other">Other</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label>Interests:</label>
+				<div class="checkbox-group">
+					<div class="checkbox-item">
+						<input type="checkbox" id="sports" name="interests" value="sports">
+						<label for="sports">Sports</label>
+					</div>
+					<div class="checkbox-item">
+						<input type="checkbox" id="music" name="interests" value="music">
+						<label for="music">Music</label>
+					</div>
+					<div class="checkbox-item">
+						<input type="checkbox" id="reading" name="interests" value="reading">
+						<label for="reading">Reading</label>
+					</div>
+					<div class="checkbox-item">
+						<input type="checkbox" id="travel" name="interests" value="travel">
+						<label for="travel">Travel</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="userBio">Bio:</label>
+				<textarea id="userBio" name="userBio" rows="4" placeholder="Tell us about yourself"></textarea>
+			</div>
+
+			<div class="form-group">
+				<label for="birthDate">Birth Date:</label>
+				<input type="date" id="birthDate" name="birthDate">
+			</div>
+
+			<div class="form-group">
+				<label for="favColor">Favorite Color:</label>
+				<input type="color" id="favColor" name="favColor" value="#ff0000">
+			</div>
+
+			<div class="form-group">
+				<label for="satisfactionLevel">Satisfaction Level:</label>
+				<input type="range" id="satisfactionLevel" name="satisfactionLevel" min="0" max="10" value="5">
+				<span id="satisfactionValue">5</span>
+			</div>
+
+			<div class="form-group">
+				<button type="button" id="submitButton">Submit</button>
+				<button type="button" id="resetButton">Reset</button>
+			</div>
+		</form>
+
+		<div id="formResult" class="result-area">
+			Form results will appear here...
+		</div>
+	</section>
+
+	<!-- Tabs Section -->
+	<section id="tabs-section">
+		<h2>Tabs</h2>
+
+		<div class="tabs">
+			<div class="tab active" data-tab="tab1">Tab 1</div>
+			<div class="tab" data-tab="tab2">Tab 2</div>
+			<div class="tab" data-tab="tab3">Tab 3</div>
+		</div>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="tab1">
+				<h3>Tab 1 Content</h3>
+				<p>This is the content for Tab 1. You can test tab switching functionality here.</p>
+			</div>
+			<div class="tab-pane" id="tab2">
+				<h3>Tab 2 Content</h3>
+				<p>This is the content for Tab 2. It becomes visible when Tab 2 is clicked.</p>
+			</div>
+			<div class="tab-pane" id="tab3">
+				<h3>Tab 3 Content</h3>
+				<p>This is the content for Tab 3. It becomes visible when Tab 3 is clicked.</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Table Section -->
+	<section id="table-section">
+		<h2>Data Table</h2>
+
+		<table id="dataTable">
+			<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Actions</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr>
+				<td>1</td>
+				<td>John Doe</td>
+				<td>john@example.com</td>
+				<td>
+					<button class="edit-btn" data-id="1">Edit</button>
+					<button class="delete-btn" data-id="1">Delete</button>
+				</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>Jane Smith</td>
+				<td>jane@example.com</td>
+				<td>
+					<button class="edit-btn" data-id="2">Edit</button>
+					<button class="delete-btn" data-id="2">Delete</button>
+				</td>
+			</tr>
+			<tr>
+				<td>3</td>
+				<td>Bob Johnson</td>
+				<td>bob@example.com</td>
+				<td>
+					<button class="edit-btn" data-id="3">Edit</button>
+					<button class="delete-btn" data-id="3">Delete</button>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<!-- Async Section -->
+	<section id="async-section">
+		<h2>Async Operations</h2>
+
+		<button id="loadDataBtn">Load Data</button>
+		<span id="loadingIndicator" class="loading hidden"></span>
+
+		<div id="asyncResult" class="result-area">
+			Async data will appear here...
+		</div>
+	</section>
+
+	<!-- Modal Section -->
+	<section id="modal-section">
+		<h2>Modal Dialog</h2>
+
+		<button id="openModalBtn">Open Modal</button>
+
+		<div id="testModal" class="modal">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h3>Modal Title</h3>
+				<p>This is a modal dialog for testing purposes.</p>
+				<button id="confirmModalBtn">Confirm</button>
+				<button id="cancelModalBtn">Cancel</button>
+			</div>
+		</div>
+	</section>
+
+	<!-- Dynamic Content Section -->
+	<section id="dynamic-section">
+		<h2>Dynamic Content</h2>
+
+		<div>
+			<input type="text" id="newItemInput" placeholder="Add new item">
+			<button id="addItemBtn">Add Item</button>
+		</div>
+
+		<ul id="dynamicList">
+			<li>Initial item 1</li>
+			<li>Initial item 2</li>
+		</ul>
+	</section>
+</div>
+
+<script>
+	// Tab functionality
+	document.querySelectorAll('.tab').forEach(tab => {
+		tab.addEventListener('click', function() {
+			// Remove active class from all tabs
+			document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+			// Add active class to clicked tab
+			this.classList.add('active');
+			// Hide all tab panes
+			document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+			// Show the corresponding tab pane
+			const tabId = this.getAttribute('data-tab');
+			document.getElementById(tabId).classList.add('active');
+		});
+	});
+
+	// Dynamic content functionality
+	document.getElementById('addItemBtn').addEventListener('click', function() {
+		const newItemInput = document.getElementById('newItemInput');
+		const dynamicList = document.getElementById('dynamicList');
+		if (newItemInput.value.trim() !== '') {
+			// Create new list item
+			const li = document.createElement('li');
+			li.textContent = newItemInput.value;
+			// Add to list
+			dynamicList.appendChild(li);
+			// Clear input
+			newItemInput.value = '';
+		}
+	});
+
+	// Form submission
+	document.getElementById('submitButton').addEventListener('click', function() {
+		const form = document.getElementById('testForm');
+		const formResult = document.getElementById('formResult');
+
+		// Collect form data
+		const formData = new FormData(form);
+		let resultHtml = '<h3>Form Submission:</h3><ul>';
+
+		// Store the favorite color value to use later
+		let favoriteColor = '';
+
+		for (const [key, value] of formData.entries()) {
+			resultHtml += `<li><strong>${key}:</strong> ${value}</li>`;
+
+			// Save the favorite color value
+			if (key === 'favColor') {
+				favoriteColor = value;
+			}
+		}
+		resultHtml += '</ul>';
+
+		// Set the background color and ensure text remains readable
+		formResult.style.backgroundColor = favoriteColor;
+
+		// Add text color contrast for readability
+		// If the background is dark, use white text; if light, use black text
+		const rgb = hexToRgb(favoriteColor);
+		const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+		formResult.style.color = brightness > 128 ? 'black' : 'white';
+
+		formResult.innerHTML = resultHtml;
+	});
+
+	// Helper function to convert hex color to RGB
+	function hexToRgb(hex) {
+		// Remove # if present
+		hex = hex.replace('#', '');
+
+		// Parse the hex values
+		const r = parseInt(hex.substring(0, 2), 16);
+		const g = parseInt(hex.substring(2, 4), 16);
+		const b = parseInt(hex.substring(4, 6), 16);
+
+		return { r, g, b };
+	}
+
+	// Form reset
+	document.getElementById('resetButton').addEventListener('click', function() {
+		document.getElementById('testForm').reset();
+		document.getElementById('formResult').innerHTML = 'Form results will appear here...';
+	});
+
+	// Satisfaction level display
+	document.getElementById('satisfactionLevel').addEventListener('input', function() {
+		document.getElementById('satisfactionValue').textContent = this.value;
+	});
+
+	// Modal functionality
+	const modal = document.getElementById('testModal');
+	const modalBtn = document.getElementById('openModalBtn');
+	const closeBtn = document.querySelector('.close');
+
+	modalBtn.addEventListener('click', function() {
+		modal.style.display = 'block';
+	});
+
+	closeBtn.addEventListener('click', function() {
+		modal.style.display = 'none';
+	});
+
+	document.getElementById('confirmModalBtn').addEventListener('click', function() {
+		alert('Confirmed!');
+		modal.style.display = 'none';
+	});
+
+	document.getElementById('cancelModalBtn').addEventListener('click', function() {
+		modal.style.display = 'none';
+	});
+
+	// Close modal when clicking outside
+	window.addEventListener('click', function(event) {
+		if (event.target === modal) {
+			modal.style.display = 'none';
+		}
+	});
+
+	// Async operations
+	document.getElementById('loadDataBtn').addEventListener('click', function() {
+		const loadingIndicator = document.getElementById('loadingIndicator');
+		const asyncResult = document.getElementById('asyncResult');
+
+		// Show loading indicator
+		loadingIndicator.classList.remove('hidden');
+
+		// Disable the button while loading
+		this.disabled = true;
+
+		// Simulate async operation
+		setTimeout(function() {
+			// Hide loading indicator
+			loadingIndicator.classList.add('hidden');
+
+			// Display result
+			asyncResult.innerHTML = `
+      <h3>Data Loaded</h3>
+      <p>This data was loaded asynchronously at ${new Date().toLocaleTimeString()}</p>
+      <ul>
+        <li>Sample data item 1</li>
+        <li>Sample data item 2</li>
+        <li>Sample data item 3</li>
+      </ul>
+    `;
+
+			// Re-enable the button
+			document.getElementById('loadDataBtn').disabled = false;
+		}, 2000);
+	});
+
+	// Table action buttons - IMPROVED VERSION
+	document.querySelectorAll('.edit-btn').forEach(button => {
+		button.addEventListener('click', function() {
+			const row = this.closest('tr');
+			const cells = row.querySelectorAll('td');
+			const id = this.getAttribute('data-id');
+
+			// Check if already in edit mode
+			if (this.textContent === 'Save') {
+				// Save mode - update the data
+				const nameInput = row.querySelector('.edit-name');
+				const emailInput = row.querySelector('.edit-email');
+
+				// Update cells with new values
+				cells[1].textContent = nameInput.value;
+				cells[2].textContent = emailInput.value;
+
+				// Change button back to Edit
+				this.textContent = 'Edit';
+			} else {
+				// Edit mode - show inputs
+				const name = cells[1].textContent;
+				const email = cells[2].textContent;
+
+				// Store original width for sizing
+				const nameWidth = cells[1].offsetWidth - 16; // Account for padding
+				const emailWidth = cells[2].offsetWidth - 16;
+
+				// Replace with properly sized inputs
+				cells[1].innerHTML = `<input type="text" value="${name}" class="edit-name" style="width: ${nameWidth}px; box-sizing: border-box;">`;
+				cells[2].innerHTML = `<input type="text" value="${email}" class="edit-email" style="width: ${emailWidth}px; box-sizing: border-box;">`;
+
+				// Change to save button
+				this.textContent = 'Save';
+			}
+		});
+	});
+
+	document.querySelectorAll('.delete-btn').forEach(button => {
+		button.addEventListener('click', function() {
+			const id = this.getAttribute('data-id');
+			if (confirm(`Are you sure you want to delete record with ID: ${id}?`)) {
+				// Find the row and remove it
+				const row = this.closest('tr');
+				row.parentNode.removeChild(row);
+			}
+		});
+	});
+
+	// Initialize the page with first tab active
+	document.querySelector('.tab[data-tab="tab1"]').click();
+</script>
