@@ -1,27 +1,12 @@
 import { Page, Locator} from '@playwright/test'
 
-export class FormPage {
+export class FormElements {
     readonly page : Page;
     readonly nameInput : Locator;
     readonly email : Locator;
     readonly password: Locator;
     readonly age: Locator;
     readonly country: Locator;
-    readonly genderMale : Locator;
-    readonly genderFemale : Locator;
-    readonly genderOther : Locator;
-    readonly checkboxSports : Locator;
-    readonly checkboxMusic : Locator;
-    readonly checkboxReading : Locator;
-    readonly checkboxtraveling: Locator;
-    readonly userBio: Locator;
-    readonly birthDay: Locator;
-    readonly favoriteColor: Locator;
-    readonly satisfactionLevel : Locator;
-    readonly submit: Locator;
-    readonly retry: Locator;
-
-
 
     constructor(page:Page){
         this.page = page;
@@ -35,10 +20,28 @@ export class FormPage {
 
     }
 
-
+    async isLoaded() {
+        try {
+            await Promise.all([
+              this.page.locator('Testing Elements Playground')
+            ]);
+            return true;
+        } catch (error) {
+            console.error("Testing Elements Playground did not load:", error);
+            return false;
+        }
+    }
 
     async goto(){
         await this.page.goto('http://localhost:9000/');
+        await this.isLoaded();
+    }
+
+    // fieldData {
+    // firstName: '',
+    // blah bhalhba}
+    async fillTextFields(fieldData = Object = {}) {
+
     }
 }
 
