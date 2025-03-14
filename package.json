@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "start": "webpack serve --mode development",
-    "dev": "webpack --watch --mode development"
+    "dev": "webpack --watch --mode development",
+    "debug": "npx playwright test --ui"
   },
   "keywords": [],
   "author": "",
