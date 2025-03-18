@@ -1,45 +1,44 @@
-import {test,expect} from '@playwright/test';
-import { FormElements } from '../page-objects/formElements';
+import {test,expect, chromium} from '@playwright/test';
+import { FormElements } from '../page-objects/formElements2';
 
 test.describe('Form Elements Page', () => {
-    let formElements : FormElements;
-
-    test.beforeEach(async({ page}) => {
-        formElements = new FormElements(page);
-        await formElements.goto();
-
-        // Create a Form Data object to enter into the form fields and check against the form verification
-    defaultFieldData = {firstName: 'bob'}
+    let formElements: FormElements;
+    test.beforeEach(async({ page }) => {
+      formElements = new FormElements(page);  // Corregido: Nombre de la clase
+      await formElements.goto();
     });
-
-    test('Fill the Form Elements on the page', async() => {
-        // FormTextField Fill
-            // Enter the Name
-            // Enter the Email
-            // Enter the password
-            // Enter the age
-        formElements.fillTextFields(defaultFieldData)
-
-        // Select the Country from dropdown
-
-        // Select Radio Buttons
-        // and Checkboxes
-
-        // Fill the Bio
-
-        // Choose a birthday
-
-        // Favorite Color selector
-
-        // Submit Results
-    });
-
-    test('Clicking submit generates the Form data on the bottom of the page', async() => {
-        // Check form data against the generated form data
-        formElements.verifyFormDataSubmission(defaultFieldData)
-    });
-
-    test('Verify the form fields and results are cleared when reset is selected', async() => {
-        expect(formElements.fieldsEmpty).toBe(True);
-    });
+    const data = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        password: 'securePassword123',
+        age: 30,
+        country: 'Canada',
+        gender: 'male',
+        interests: ['sports', 'reading'],
+        bio: 'This is my biography',
+        birthDate: '1999-10-11',
+        favoriteColor: '#0000ff',
+        satisfactionLevel: 5
+      };
+      test.only('Fill and submit form', async () => {
+        const browser = await chromium.launch({
+            slowMo: 100000,
+            headless: false 
+          });
+        await test.step('We fill the elements on the page', async () => {
+          await formElements.fillAndSubmitForm(data);
+        });
+        await test.step('We compare the data object with the information displayed',async() => {
+          await formElements.verifyFormResults(formElements, data, expect);
+        });
+        await test.step('We reset the form', async () => {
+          await formElements.resetForm();
+        });
+        await test.step('Verify all teh fields are cleared after reset',async() => {
+          await formElements.verifyFormIsEmpty();
+        })
+        //notes: the reset button does clear all the entrys except for the color submit
+        //canada shows as ca, uk, us, au
+        //satisfaction level does not get reset with the reset button
+      });
 })
