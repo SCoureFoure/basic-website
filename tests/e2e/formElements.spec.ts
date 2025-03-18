@@ -4,12 +4,12 @@ import { FormElements } from '../page-objects/formElements2';
 test.describe('Form Elements Page', () => {
     let formElements: FormElements;
     test.beforeEach(async({ page }) => {
-      formElements = new FormElements(page);  // Corregido: Nombre de la clase
+      formElements = new FormElements(page);
       await formElements.goto();
     });
-    const data = {
-        name: 'John Doe',
-        email: 'john@example.com',
+    const userData = {
+        userName: 'John Doe',
+        userEmail: 'john@example.com',
         password: 'securePassword123',
         age: 30,
         country: 'Canada',
@@ -20,16 +20,13 @@ test.describe('Form Elements Page', () => {
         favoriteColor: '#0000ff',
         satisfactionLevel: 5
       };
-      test.only('Fill and submit form', async () => {
-        const browser = await chromium.launch({
-            slowMo: 100000,
-            headless: false 
-          });
+
+      test('Fill and submit form', async () => {
         await test.step('We fill the elements on the page', async () => {
-          await formElements.fillAndSubmitForm(data);
+          await formElements.fillAndSubmitForm(userData);
         });
-        await test.step('We compare the data object with the information displayed',async() => {
-          await formElements.verifyFormResults(formElements, data, expect);
+        await test.step('We compare the userData object with the information displayed',async() => {
+          expect(userData).toEqual(await formElements.formResults) // TODO switch this to this format.
         });
         await test.step('We reset the form', async () => {
           await formElements.resetForm();

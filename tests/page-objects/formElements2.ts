@@ -1,23 +1,17 @@
-import { Page,Locator,expect} from '@playwright/test'
+import { Page } from "@playwright/test";
 
-export class FormElements{
-    readonly page: Page;
-    constructor (page:Page){
+export class FormElements {
+    protected page: Page;
+    // ELEMENTS
+    readonly nameInput;
+    readonly email;
+
+    constructor(page: Page) {
         this.page = page;
+        this.nameInput = this.page.getByTestId("inputUserName");
+        this.email = this.page.getByTestId("userEmail");
     }
-    async isLoaded() {
-        try {
-            await this.page.locator('text=Testing Elements Playground').waitFor({state:'visible'})
-            return true;
-        } catch (error) {
-            console.error("Testing Elements Playground did not load:", error);
-            return false;
-        }
-    }
-    async goto(){
-        await this.page.goto('http://localhost:9000/');
-        await this.isLoaded();
-    }
+
     private selectors = {
         nameInput : 'inputUserName',
         email : 'userEmail',
@@ -39,6 +33,7 @@ export class FormElements{
         resetbutton : 'formGroupResetButton',
         formResults : 'formResults',
     }
+
     get allElementsFromForm (){
         return{
             nameInput : this.page.getByTestId(this.selectors.nameInput),
@@ -62,6 +57,24 @@ export class FormElements{
             formResults: this.page.getByTestId(this.selectors.formResults)
         }
     }
+
+    // METHODS
+    async goto(){
+        await this.page.goto('http://localhost:9000/');
+        await this.isLoaded();
+    }
+
+    async isLoaded() {
+        try {
+            // TODO use the element call for the header, not the .locator call directly.
+            await this.page.locator('text=Testing Elements Playground').waitFor({state:'visible'})
+            return true;
+        } catch (error) {
+            console.error("Testing Elements Playground did not load:", error);
+            return false;
+        }
+    }
+
     async fillForm(data: any): Promise<void> {
         const elements = this.allElementsFromForm;
         if (data.name !== undefined) await elements.nameInput.fill(data.name);
@@ -70,7 +83,7 @@ export class FormElements{
         if (data.age !== undefined) await elements.age.fill(String(data.age));
         if (data.country !== undefined){
             await elements.country.click();
-            await elements.country.selectOption('Canada');
+            await elements.country.selectOption('Canada'); // TODO : Hardcoded value
         } else {}
         if (data.bio !== undefined) await elements.bio.fill(data.bio);
         if (data.birthDate !== undefined) await elements.birthDate.fill(data.birthDate);
@@ -80,24 +93,16 @@ export class FormElements{
         } 
 
         if (data.satisfactionLevel !== undefined) await elements.satisfactionLevel.fill(String(data.satisfactionLevel));
-        if (data.gender) {
-            switch (data.gender) {
-              case 'male':
-                await elements.genderMale.check();
-                break;
-              case 'female':
-                await elements.genderFemale.check();
-                break;
-              case 'other':
-                await elements.genderOther.check();
-                break;
-            }
-          }
+
+
+        // fill gender
+        await this.page.locator(`radioGroup${data.gender}`).click(); // TODO This resolves to radioGroupMale, radioGroupOther, radioGroupFemale
+
+
+        // For each of data.interests(interest) {
+        // click await this.page.locator(`interests{data.interest}`).click();
+        // }
         if (data.interest && Array.isArray(data.interest)){
-            await elements.interestSports.uncheck().catch(() => {});
-            await elements.interestMusic.uncheck().catch(() => {});
-            await elements.interestReading.uncheck().catch(() => {});
-            await elements.interestTravel.uncheck().catch(() => {});
             for (const interest of data.interest){
                 switch (interest){
                     case 'sports':
@@ -114,9 +119,12 @@ export class FormElements{
             }
         }
     }
+
+    // UserData == this.FormData
     async getFormResults(): Promise<Record<string, string>> {
         const results: Record<string, string> = {};
         const formResult = this.page.getByTestId(this.selectors.formResults);
+
         await formResult.waitFor({ state: 'visible' });
         const resultItems = formResult.locator('li');
         const count = await resultItems.count();
@@ -132,21 +140,24 @@ export class FormElements{
             else {
               results[key] = value;
             }
-
           }
         }        
-        return results;
+        return results; // TODO returns an object with the values mapped to the same keys as the userData object we pass into other methods.
     }
+
     async fillAndSubmitForm(data:any): Promise<void> {
         await this.fillForm(data);
         await this.allElementsFromForm.submitButton.click();
     }
+
     async resetForm(): Promise<void> {
         await this.allElementsFromForm.resetButton.click();
     }
+
     async timeOut(){
         return this.page.waitForTimeout(500);
     }
+
     async verifyFormIsEmpty(): Promise<void> {
         const elements = this.allElementsFromForm;
         // Verificar que todos los campos de texto estén vacíos
@@ -192,8 +203,4 @@ export class FormElements{
         expectFn(formResults.satisfactionLevel).toBe(String(inputData.satisfactionLevel));
         expectFn(formResults.userCountry).toBe(this.getCountryCode(inputData.country));
     }
-    
-    
-
-    
 }
