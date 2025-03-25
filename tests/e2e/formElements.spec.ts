@@ -1,5 +1,6 @@
 import {test,expect, chromium} from '@playwright/test';
-import { FormElements } from '../page-objects/formElements2';
+import { FormElements } from '../page-objects/formElements';
+
 
 test.describe('Form Elements Page', () => {
     let formElements: FormElements;
@@ -25,7 +26,7 @@ test.describe('Form Elements Page', () => {
         favColor: '#0000ff',
         satisfactionLevel: 5
       };
-      test.only('Fill and submit form', async () => {
+      test('Fill and submit form', async () => {
         await test.step('We fill the elements on the page', async () => {
           await formElements.fillAndSubmitForm(userData);
           await formElements.getFormValues();
