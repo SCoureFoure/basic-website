@@ -1,14 +1,54 @@
 import { Page,Locator,expect} from '@playwright/test'
 
 export class FormElements{
-    readonly page: Page;
+    protected page:Page;
+    //Elements
+    readonly nameInput;
+    readonly email;
+    readonly password;
+    readonly age;
+    readonly country;
+    readonly genderMale;
+    readonly genderFemale;
+    readonly genderOther;
+    readonly intrestSports;
+    readonly interestMusic;
+    readonly interestReading;
+    readonly interestTravel;
+    readonly bio;
+    readonly birthDate;
+    readonly favoriteColor;
+    readonly satisfactionLevel;
+    readonly submitButton;
+    readonly resetButton;
+    readonly formResults;
     constructor (page:Page){
         this.page = page;
+        //corrected eliminated extra steps
+        this.nameInput = this.page.getByTestId('inputUserName');
+        this.email = this.page.getByTestId('userEmail');
+        this.password = this.page.getByTestId('userPassword');
+        this.age = this.page.getByTestId('userAge');
+        this.country = this.page.getByTestId('userCountry');
+        this.genderMale = this.page.getByTestId('radioGroupMale');
+        this.genderFemale = this.page.getByTestId('radioGroupFemale');
+        this.genderOther = this.page.getByTestId('radioGroupOther');
+        this.intrestSports = this.page.getByTestId('checkboxItemSports');
+        this.interestMusic = this.page.getByTestId('checkboxItemMusic');
+        this.interestReading = this.page.getByTestId('checkboxItemReading');
+        this.interestTravel = this.page.getByTestId('checkboxItemTravel');
+        this.bio = this.page.getByTestId('userBio');
+        this.birthDate = this.page.getByTestId('birthDate');
+        this.favoriteColor = this.page.getByTestId('favoriteColor');
+        this.satisfactionLevel = this.page.getByTestId('satisfactionLevel');
+        this.submitButton = this.page.getByTestId('formGroupSubmitButton');
+        this.resetButton = this.page.getByTestId('formGroupResetButton');
+        this.formResults = this.page.getByTestId('formResults');
     }
     async isLoaded() {
         try {
-            await this.page.locator('text=Testing Elements Playground').waitFor({state:'visible'})
-            return true;
+            await this.page.getByRole('heading',{name: 'Testing Elements Playground'}).waitFor({state:'visible'})
+            return true; //correctet from locator to header
         } catch (error) {
             console.error("Testing Elements Playground did not load:", error);
             return false;
@@ -18,156 +58,81 @@ export class FormElements{
         await this.page.goto('http://localhost:9000/');
         await this.isLoaded();
     }
-    private selectors = {
-        nameInput : 'inputUserName',
-        email : 'userEmail',
-        password : 'userPassword',
-        age : 'userAge',
-        country : 'userCountry',
-        genderMale : 'radioGroupMale',
-        genderFemale : 'radioGroupFemale',
-        genderOther : 'radioGroupOther', 
-        interestSports : 'checkboxItemSports',
-        interestMusic : 'checkboxItemMusic',
-        interestReading : 'checkboxItemReading',
-        interestTravel : 'checkboxItemTravel',
-        bio : 'userBio',
-        birthDate : 'birthDate',
-        favoriteColor : 'favoriteColor',
-        satisfactionLevel : 'satisfactionLevel',
-        submitButton : 'formGroupSubmitButton',
-        resetbutton : 'formGroupResetButton',
-        formResults : 'formResults',
-    }
-    get allElementsFromForm (){
-        return{
-            nameInput : this.page.getByTestId(this.selectors.nameInput),
-            email : this.page.getByTestId(this.selectors.email),
-            password : this.page.getByTestId(this.selectors.password),
-            age : this.page.getByTestId(this.selectors.age),
-            country : this.page.getByTestId(this.selectors.country),
-            genderFemale: this.page.getByTestId(this.selectors.genderFemale),
-            genderMale: this.page.getByTestId(this.selectors.genderMale),
-            genderOther: this.page.getByTestId(this.selectors.genderOther),
-            interestSports: this.page.getByTestId(this.selectors.interestSports),
-            interestMusic: this.page.getByTestId(this.selectors.interestMusic),
-            interestReading: this.page.getByTestId(this.selectors.interestReading),
-            interestTravel: this.page.getByTestId(this.selectors.interestTravel),
-            bio: this.page.getByTestId(this.selectors.bio),
-            birthDate: this.page.getByTestId(this.selectors.birthDate),
-            favoriteColor: this.page.getByTestId(this.selectors.favoriteColor),
-            satisfactionLevel: this.page.getByTestId(this.selectors.satisfactionLevel),
-            submitButton: this.page.getByTestId(this.selectors.submitButton),
-            resetButton: this.page.getByTestId(this.selectors.resetbutton),
-            formResults: this.page.getByTestId(this.selectors.formResults)
-        }
-    }
-    async fillForm(data: any): Promise<void> {
-        const elements = this.allElementsFromForm;
-        if (data.name !== undefined) await elements.nameInput.fill(data.name);
-        if (data.email !== undefined) await elements.email.fill(data.email);
-        if (data.password !== undefined) await elements.password.fill(data.password);
-        if (data.age !== undefined) await elements.age.fill(String(data.age));
-        if (data.country !== undefined){
-            await elements.country.click();
-            await elements.country.selectOption('Canada');
+    async fillForm(userData: any): Promise<void> {userData
+        if (userData.userName !== undefined) await this.nameInput.fill(userData.userName);
+        if (userData.userEmail !== undefined) await this.email.fill(userData.userEmail);
+        if (userData.userPassword !== undefined) await this.password.fill(userData.userPassword);
+        if (userData.userAge !== undefined) await this.age.fill(String(userData.userAge));
+        if (userData.userCountry !== undefined){ //corrected hardcoded ca
+            await this.country.click();
+            await this.country.selectOption(userData.userCountry);
         } else {}
-        if (data.bio !== undefined) await elements.bio.fill(data.bio);
-        if (data.birthDate !== undefined) await elements.birthDate.fill(data.birthDate);
-        if (data.favoriteColor !== undefined){
-            await elements.favoriteColor.click();
-            await elements.favoriteColor.fill(data.favoriteColor);
+        if (userData.userBio !== undefined) await this.bio.fill(userData.userBio);
+        if (userData.birthDate !== undefined) await this.birthDate.fill(userData.birthDate);
+        if (userData.favColor !== undefined){
+            await this.favoriteColor.click();
+            await this.favoriteColor.fill(userData.favColor);
         } 
-
-        if (data.satisfactionLevel !== undefined) await elements.satisfactionLevel.fill(String(data.satisfactionLevel));
-        if (data.gender) {
-            switch (data.gender) {
+        if (userData.satisfactionLevel !== undefined) await this.satisfactionLevel.fill(String(userData.satisfactionLevel));
+        if (userData.gender) {
+            switch (userData.gender) {
               case 'male':
-                await elements.genderMale.check();
+                await this.genderMale.check();
                 break;
               case 'female':
-                await elements.genderFemale.check();
+                await this.genderFemale.check();
                 break;
               case 'other':
-                await elements.genderOther.check();
+                await this.genderOther.check();
                 break;
             }
           }
-        if (data.interest && Array.isArray(data.interest)){
-            await elements.interestSports.uncheck().catch(() => {});
-            await elements.interestMusic.uncheck().catch(() => {});
-            await elements.interestReading.uncheck().catch(() => {});
-            await elements.interestTravel.uncheck().catch(() => {});
-            for (const interest of data.interest){
-                switch (interest){
-                    case 'sports':
-                        await elements.interestSports.check();
-                        break;
-                    case 'music':
-                        await elements.interestMusic.check();
-                        break;
-                    case 'reading':
-                        await elements.interestReading.check();
-                    case 'travel':
-                        await elements.interestTravel.check();
-                }
-            }
+        if (userData.interests && typeof userData.interests === 'object' && !Array.isArray(userData.interests)){
+            await this.intrestSports.uncheck().catch(() => {});
+            await this.interestMusic.uncheck().catch(() => {});
+            await this.interestReading.uncheck().catch(() => {});
+            await this.interestTravel.uncheck().catch(() => {});
+            if (userData.interests.sports) {
+                await this.intrestSports.check();
+              }
+              if (userData.interests.music) {
+                await this.interestMusic.check();
+              }
+              if (userData.interests.reading) {
+                await this.interestReading.check();
+              }
+              if (userData.interests.travel) {
+                await this.interestTravel.check();
+              }
         }
     }
-    async getFormResults(): Promise<Record<string, string>> {
-        const results: Record<string, string> = {};
-        const formResult = this.page.getByTestId(this.selectors.formResults);
-        await formResult.waitFor({ state: 'visible' });
-        const resultItems = formResult.locator('li');
-        const count = await resultItems.count();
-        for (let i = 0; i < count; i++) {
-          const text = await resultItems.nth(i).textContent() || '';
-          const match = text.match(/^(.*?):\s*(.*)$/);
-          if (match && match.length >= 3) {
-            let key = match[1].trim();
-            const value = match[2].trim();
-            if (key === 'favColor'){
-              results['favoriteColor'] = value;
-            } 
-            else {
-              results[key] = value;
-            }
-
-          }
-        }        
-        return results;
-    }
-    async fillAndSubmitForm(data:any): Promise<void> {
-        await this.fillForm(data);
-        await this.allElementsFromForm.submitButton.click();
+    async fillAndSubmitForm(userData:any): Promise<void> {
+        await this.fillForm(userData);
+        await this.page.waitForTimeout(5000); //debug pourpuses
+        await this.submitButton.click(); 
+        await this.page.waitForTimeout(5000); //debug pourpuses
     }
     async resetForm(): Promise<void> {
-        await this.allElementsFromForm.resetButton.click();
-    }
-    async timeOut(){
-        return this.page.waitForTimeout(500);
+        await this.resetButton.click();
     }
     async verifyFormIsEmpty(): Promise<void> {
-        const elements = this.allElementsFromForm;
-        // Verificar que todos los campos de texto estén vacíos
-        expect(await elements.nameInput.inputValue()).toBe('');
-        expect(await elements.email.inputValue()).toBe('');
-        expect(await elements.password.inputValue()).toBe('');
-        expect(await elements.age.inputValue()).toBe('');
-        expect(await elements.bio.inputValue()).toBe('');
-        expect(await elements.birthDate.inputValue()).toBe('');
+        expect(await this.nameInput.inputValue()).toBe('');
+        expect(await this.email.inputValue()).toBe('');
+        expect(await this.password.inputValue()).toBe('');
+        expect(await this.age.inputValue()).toBe('');
+        expect(await this.bio.inputValue()).toBe('');
+        expect(await this.birthDate.inputValue()).toBe('');
         //expect(await elements.favoriteColor.inputValue()).toBe('');
-        const selectedCountry = await elements.country.evaluate((el: HTMLSelectElement) => el.value);
+        const selectedCountry = await this.country.evaluate((el: HTMLSelectElement) => el.value);
         expect(selectedCountry).toBe('');
-        expect(await elements.genderMale.isChecked()).toBe(false);
-        expect(await elements.genderFemale.isChecked()).toBe(false);
-        expect(await elements.genderOther.isChecked()).toBe(false);
-        expect(await elements.interestSports.isChecked()).toBe(false);
-        expect(await elements.interestMusic.isChecked()).toBe(false);
-        expect(await elements.interestReading.isChecked()).toBe(false);
-        expect(await elements.interestTravel.isChecked()).toBe(false);
+        expect(await this.genderMale.isChecked()).toBe(false);
+        expect(await this.genderFemale.isChecked()).toBe(false);
+        expect(await this.genderOther.isChecked()).toBe(false);
+        expect(await this.intrestSports.isChecked()).toBe(false);
+        expect(await this.interestMusic.isChecked()).toBe(false);
+        expect(await this.interestReading.isChecked()).toBe(false);
+        expect(await this.interestTravel.isChecked()).toBe(false);
     }
-    
     getCountryCode(countryName: string): string {
         const map: Record<string, string> = {
           'United States': 'us',
@@ -177,23 +142,29 @@ export class FormElements{
         };
         return map[countryName] || countryName;
     }
-
-    async verifyFormResults(formElements,inputData,expectFn){
-        const formResults = await this.getFormResults();
+    async getFormValues (){ //we now save it on a json object
+        await this.page.waitForSelector('#formResult h3:has-text("Form Submission:")');
+        const formData2 = await this.page.evaluate(() => {
+            const items = document.querySelectorAll('#formResult ul li');
+            const result = {};
         
-        expectFn(formResults.userName).toBe(inputData.name);
-        expectFn(formResults.userEmail).toBe(inputData.email);
-        expectFn(formResults.userPassword).toBe(inputData.password);
-        expectFn(formResults.userAge).toBe(String(inputData.age));
-        expectFn(formResults.gender).toBe(inputData.gender);
-        expectFn(formResults.userBio).toBe(inputData.bio);
-        expectFn(formResults.birthDate).toBe(inputData.birthDate);
-        expectFn(formResults.favoriteColor).toBe(inputData.favoriteColor);
-        expectFn(formResults.satisfactionLevel).toBe(String(inputData.satisfactionLevel));
-        expectFn(formResults.userCountry).toBe(this.getCountryCode(inputData.country));
-    }
-    
-    
+            items.forEach(item => {
+              const strongEl = item.querySelector('strong');
+              const field = strongEl?.textContent?.replace(':', '') || '';
+              const fullText = item.textContent || '';
+              const value = fullText.substring(fullText.indexOf(':') + 1).trim();
 
-    
+              if (field in result){
+                if (!Array.isArray(result[field])){
+                    result[field] = [result[field]];
+                }
+                result[field].push(value);
+              }else{
+                result[field] = value;
+              }
+            });        
+            return result;
+          });
+          return formData2;
+    }
 }

@@ -4,32 +4,43 @@ import { FormElements } from '../page-objects/formElements2';
 test.describe('Form Elements Page', () => {
     let formElements: FormElements;
     test.beforeEach(async({ page }) => {
-      formElements = new FormElements(page);  // Corregido: Nombre de la clase
+      formElements = new FormElements(page);  // Correctd class name
       await formElements.goto();
     });
-    const data = {
-        name: 'John Doe',
-        email: 'john@example.com',
-        password: 'securePassword123',
-        age: 30,
-        country: 'Canada',
+    const userData = {
+        userName: 'John Doe',
+        userEmail: 'john@example.com',
+        userPassword: 'securePassword123',
+        userAge: 30,
+        userCountry: 'Canada',
         gender: 'male',
-        interests: ['sports', 'reading'],
-        bio: 'This is my biography',
+        interests: {
+          sports: true,
+          reading: true,
+          music: false,
+          travel: false
+          },
+        userBio: 'This is my biography',
         birthDate: '1999-10-11',
-        favoriteColor: '#0000ff',
+        favColor: '#0000ff',
         satisfactionLevel: 5
       };
       test.only('Fill and submit form', async () => {
-        const browser = await chromium.launch({
-            slowMo: 100000,
-            headless: false 
-          });
         await test.step('We fill the elements on the page', async () => {
-          await formElements.fillAndSubmitForm(data);
+          await formElements.fillAndSubmitForm(userData);
+          await formElements.getFormValues();
         });
-        await test.step('We compare the data object with the information displayed',async() => {
-          await formElements.verifyFormResults(formElements, data, expect);
+        await test.step('We compare the Userdata object with the information displayed',async() => {
+          const formData2 = await formElements.getFormValues();
+          //Needed to normalize the data before comparison
+          expect (formData2).toMatchObject({ //corrected comparison
+            userEmail: userData.userEmail,
+            userBio: userData.userBio,
+            gender: userData.gender,
+            birthDate: userData.birthDate,
+            favColor: userData.favColor
+          });
+          //expect(userData).toEqual(await formElements.formResults) // TODO switch this to this format.
         });
         await test.step('We reset the form', async () => {
           await formElements.resetForm();
