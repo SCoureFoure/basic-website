@@ -11,7 +11,7 @@ export class FormElements{
     readonly genderMale;
     readonly genderFemale;
     readonly genderOther;
-    readonly intrestSports;
+    readonly interestSports;
     readonly interestMusic;
     readonly interestReading;
     readonly interestTravel;
@@ -33,7 +33,7 @@ export class FormElements{
         this.genderMale = this.page.getByTestId('radioGroupMale');
         this.genderFemale = this.page.getByTestId('radioGroupFemale');
         this.genderOther = this.page.getByTestId('radioGroupOther');
-        this.intrestSports = this.page.getByTestId('checkboxItemSports');
+        this.interestSports = this.page.getByTestId('checkboxItemSports');
         this.interestMusic = this.page.getByTestId('checkboxItemMusic');
         this.interestReading = this.page.getByTestId('checkboxItemReading');
         this.interestTravel = this.page.getByTestId('checkboxItemTravel');
@@ -128,7 +128,7 @@ export class FormElements{
         expect(await this.genderMale.isChecked()).toBe(false);
         expect(await this.genderFemale.isChecked()).toBe(false);
         expect(await this.genderOther.isChecked()).toBe(false);
-        expect(await this.intrestSports.isChecked()).toBe(false);
+        expect(await this.interestSports.isChecked()).toBe(false);
         expect(await this.interestMusic.isChecked()).toBe(false);
         expect(await this.interestReading.isChecked()).toBe(false);
         expect(await this.interestTravel.isChecked()).toBe(false);
